@@ -2,6 +2,8 @@ package com.example.quizeactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -22,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String KEY_CORRECT = "correct";
     private Button mTrueButton;
     private Button mFalseButton;//实例
-    private Button mNextButton;
+    private ImageButton mNextButton;
     private ImageButton mPreButton;
     private Button mCheatButton;
     private TextView mQuestionTextView;
@@ -87,11 +89,12 @@ public class MainActivity extends AppCompatActivity {
         mCheatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this,CheatActivity.class);
+                startActivity(intent);
             }
         });
 
-        mNextButton = (Button) findViewById(R.id.next_button);
+        mNextButton = (ImageButton) findViewById(R.id.next_button);
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
