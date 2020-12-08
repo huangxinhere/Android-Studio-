@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--XML文件里面的注释格式。在XML中，形如 <Button /> 的表示方式，其中“/>”的含义表示这个XML中没有内文，他是一个最小组成单元，也就是说他的中间不能包含其他任何< >的代码，所以在<Button />中间注释会出现错误  -->
+<!--下方例如网站之类的东西是啥，有什么用 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools = "http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="com.example.quizeactivity.CheatActivity"
+    >
+<!--padding:距离父布局的边框 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/warning_text"
+        android:padding="24dp" />
+
+    <TextView
+        android:id="@+id/answer_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="24dp"
+        tools:text="Answer"/>
+
+    <Button
+        android:id="@+id/show_answer_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:text="@string/show_answer_button" />
+
+</LinearLayout>

@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mFalseButton;//实例
     private Button mNextButton;
     private ImageButton mPreButton;
+    private Button mCheatButton;
     private TextView mQuestionTextView;
     private int userAnsweredCorrect = 0;//记录答对的题目数量
 
@@ -79,6 +80,14 @@ public class MainActivity extends AppCompatActivity {
                                        Toast.LENGTH_SHORT).show();*/
                 checkAnswer(false);
                 showRecord();
+            }
+        });
+
+        mCheatButton = (Button) findViewById(R.id.cheat_button);
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 

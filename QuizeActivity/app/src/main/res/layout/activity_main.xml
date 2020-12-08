@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:padding="24dp"
         />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,6 +34,15 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/cheat_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/cheat_button"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,16 +56,14 @@
             android:src="@drawable/ic_baseline_arrow_back_ios_24"
            />// android:text="@string/pre_button"不要button了，为使界面更简洁
             android:drawableLeft="@drawable/ic_baseline_arrow_back_ios_24"
-            android:drawablePadding="4dp"
+            android:drawablePadding="4dp"这个是文字和图标在同一个按钮内时的设置
             />
 
-        <Button
+        <ImageButton
             android:id="@+id/next_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/next_button"
-            android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
-            android:drawablePadding="4dp"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
             />
 
     </LinearLayout>
