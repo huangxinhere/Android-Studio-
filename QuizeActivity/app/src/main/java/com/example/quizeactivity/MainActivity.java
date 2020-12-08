@@ -18,11 +18,15 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "QuizActivity";//日志查看生命周期
     private static final String KEY_INDEX="index";
+    private static final String KEY_ANSWERED = "answered";
+    private static final String KEY_CORRECT = "correct";
     private Button mTrueButton;
     private Button mFalseButton;//实例
     private Button mNextButton;
     private ImageButton mPreButton;
     private TextView mQuestionTextView;
+    private int userAnsweredCorrect = 0;//记录答对的题目数量
+
     //数组对象是Question类的对象，所以不停的构造;然后引用的字符串资源是整型；对象与对象之间要用逗号隔开
     private Question[] mQuestionBank= new Question[]{
       new Question(R.string.question_australia,true),
@@ -37,19 +41,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate(Bundle) called");
         setContentView(R.layout.activity_main);//https://www.cnblogs.com/Chenshuai7/p/5290918.html有详细介绍
+        /*   userAnsweredCorrect = savedInstanceState.getInt(KEY_CORRECT);//取出数据之后app运行不了？？*/
 
         if (savedInstanceState != null){//检验存储的bundle信息????
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
         }//好像又反过来赋值了
 
         mQuestionTextView=(TextView) findViewById(R.id.question_text_view);//理解是把视图的test引为这里的实例
-
-       /* mQuestionTextView.setOnClickListener(new View.OnClickListener()
-        {
+        mQuestionTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v){
-                mCurrentIndex = (mCurrentIndex+1) % mQuestionBank.length;//我觉得要首先变成按钮才有互动的窗口
+                mCurrentIndex = (mCurrentIndex+1) % mQuestionBank.length;//我觉得要首先变成按钮才有互动的窗口/不是，不需要
+                updateQuestion();
             }
-        });*/
+        });
        // int question = mQuestionBank[mCurrentIndex].getTestResId();//又设置了question变量，联系数组，getter方法（同一个包内另外的类的方法可调用）得到它的实例/本来数组就是Question类的
         //mQuestionTextView.setText(question);//又把question引到对象，模糊觉得联系起了对象和数组
 
@@ -61,8 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 t.setGravity(Gravity.TOP,0,0);
                 t.show();*/
                 checkAnswer(true);
-
-                mTrueButton.setEnabled(false);
+                showRecord();
             }
         });
 
@@ -71,10 +75,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /*Toast.makeText(MainActivity.this,
-                                       R.string.incorret_toast,
+                                       R.string.incorrect_toast,
                                        Toast.LENGTH_SHORT).show();*/
                 checkAnswer(false);
-                mFalseButton.setEnabled(false);
+                showRecord();
             }
         });
 
@@ -84,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex+1) % mQuestionBank.length;//递增数组索引；当进行点击后的mCurrentIndex能保存新的赋值，为什么？猜想：多次调用同一个方法，其体内的变量能保持状态？
                 updateQuestion();//方法删除
+                showRecord();
             }
         });
 
@@ -98,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG,"this step is done.");
                 updateQuestion();
                 Log.d(TAG,"all is done.");//
+                showRecord();
             }
         });
 
@@ -124,12 +130,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState){
+    public void onSaveInstanceState(Bundle savedInstanceState) {//英文解释：保存实例状态**在更新配置（例如旋转）时保存数据？
         super.onSaveInstanceState(savedInstanceState);
-        Log.i(TAG,"onSaveInstanceState");
-        savedInstanceState.putInt(KEY_INDEX,mCurrentIndex);
-    }
+        Log.i(TAG, "onSaveInstanceState");
+        savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);//？？？？对应index,
+        savedInstanceState.putInt(KEY_CORRECT,userAnsweredCorrect);
 
+        if (savedInstanceState != null) {//问题：什么东西？
+
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
+
+            boolean answerIsAnswered[] = new boolean[mQuestionBank.length];
+            for (int i = 0; i < mQuestionBank.length; i++) {
+                answerIsAnswered[i] = mQuestionBank[i].isAnswered();
+            }
+            savedInstanceState.putBooleanArray(KEY_ANSWERED, answerIsAnswered);
+        }//将是否回答的数据存入数组，然后放在Bundle中
+    }
     @Override
     public void onStop(){
         super.onStop();
@@ -143,11 +160,24 @@ public class MainActivity extends AppCompatActivity {
     }
     /**********************************************************************************************/
 
+    private void checkIfAnswered(){//封装——检查是否回答过问题的函数*****true/false键、pre/next键要用到
+        boolean answerIsAnswered = mQuestionBank[mCurrentIndex].isAnswered();//mAnswered 有赋值吗？？
+        if (answerIsAnswered == true){
+            //如果题目被回答，则按键设置不可按下
+            mTrueButton.setEnabled(false);
+            mFalseButton.setEnabled(false);
+        }else{
+            mTrueButton.setEnabled(true);
+            mFalseButton.setEnabled(true);
+        }
+    }
+
     private void updateQuestion()//将公共代码放在单独的私有方法里
     {//不属于onCreate方法里面了，独立出来
         Log.d(TAG,"Updating question test",new Exception());
         int question = mQuestionBank[mCurrentIndex].getTestResId();
         mQuestionTextView.setText(question);
+        checkIfAnswered();
     }
 
     private void checkAnswer(boolean userPressedTrue)
@@ -156,12 +186,37 @@ public class MainActivity extends AppCompatActivity {
         int messageResId = 0;//什么用_作为判断结果的统一变量
 
         if (userPressedTrue==answerIsTrue){
-            messageResId = R.string.corret_toast;
+            messageResId = R.string.correct_toast;
+            userAnsweredCorrect++;//只是记录答对次数
         }else {
-            messageResId=R.string.incorret_toast;
+            messageResId=R.string.incorrect_toast;
         }
+
+        mQuestionBank[mCurrentIndex].setAnswered(true);//判断完正误之后就调用接受参数的方法改变Boolean值
+        checkIfAnswered();//所以就能有禁掉的指令
 
         Toast.makeText(this,messageResId,Toast.LENGTH_SHORT)
                 .show();
+    }
+
+    private void showRecord(){
+        boolean allAnswered = true ;
+        String message = null;
+        double correctMark = 0;
+        int correctAnswerNum = 0;
+
+        for (int i = 0; i < mQuestionBank.length; i++){
+            if (mQuestionBank[i].isAnswered() == false){
+                allAnswered = false;
+                break;
+            }//只要有没答完的，allAnswered都是false；每一次调用这个方法时都会检查是否完全答完
+        }
+        if (allAnswered == true){//直到完全答完
+            correctMark = (double) userAnsweredCorrect/mQuestionBank.length;
+            correctMark = (double)((int)(correctMark*10000)/100.0);//保留后两位
+            message = "正确率" + String.valueOf(correctMark) + "%";
+            Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
+        }
+
     }
 }
