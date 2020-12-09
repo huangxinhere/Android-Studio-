@@ -2,6 +2,7 @@ package com.example.quizeactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String KEY_INDEX="index";
     private static final String KEY_ANSWERED = "answered";
     private static final String KEY_CORRECT = "correct";
+    private static final int REQUEST_CODE_CHEAT = 0;
     private Button mTrueButton;
     private Button mFalseButton;//实例
     private ImageButton mNextButton;
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private int mCurrentIndex = 0;//什么用？意思是当前索引
+    private boolean mIsCheater;
+
 /****************************************************************************************************/
     @Override               //bundle有捆绑的意思
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +93,10 @@ public class MainActivity extends AppCompatActivity {
         mCheatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,CheatActivity.class);
-                startActivity(intent);
+                //为了附加信息，注释掉Intent intent = new Intent(MainActivity.this,CheatActivity.class);
+                boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();//提取布尔值
+                Intent intent = CheatActivity.newIntent(MainActivity.this,answerIsTrue);//布尔值给子activity作为他的intent，而intent由基本（包名、）增加
+                startActivityForResult(intent,REQUEST_CODE_CHEAT);//带有返回要求的启动方法
             }
         });
 
@@ -99,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex+1) % mQuestionBank.length;//递增数组索引；当进行点击后的mCurrentIndex能保存新的赋值，为什么？猜想：多次调用同一个方法，其体内的变量能保持状态？
+                mIsCheater = false;
                 updateQuestion();//方法删除
                 showRecord();
             }
@@ -122,6 +129,20 @@ public class MainActivity extends AppCompatActivity {
         updateQuestion();//单独悬在这？好像只有显示问题那儿要用，但不能mQuestion.updateQuestion()?
 
     }//安卓编程的定位函数，主要是引用.R文件里的引用名。一般在R.java文件里系统会自动帮你给出你在XML里定义的ID或者Layout里面的名称，例如：Button button=(Button)findViewById(R.id.button01);这样就引用了XML（res里的布局文件）文件里面的button，使得在写.java的按钮时能与XML里的一致。
+
+    protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);//这怎么了？？覆盖这个原有的方法
+        if (requestCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == REQUEST_CODE_CHEAT){
+            if (data == null){
+                return;
+            }
+        }//if语句在干嘛？要求同时满足结果代码和请求代码才赋值解析的结果
+        mIsCheater = CheatActivity.wasAnswerShown(data);
+    }
+
 /************************************************************************************/
     @Override
     public void onStart(){
@@ -197,11 +218,15 @@ public class MainActivity extends AppCompatActivity {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
         int messageResId = 0;//什么用_作为判断结果的统一变量
 
-        if (userPressedTrue==answerIsTrue){
-            messageResId = R.string.correct_toast;
-            userAnsweredCorrect++;//只是记录答对次数
+        if (mIsCheater){
+            messageResId = R.string.judgment_toast;
         }else {
-            messageResId=R.string.incorrect_toast;
+            if (userPressedTrue == answerIsTrue) {
+                messageResId = R.string.correct_toast;
+                userAnsweredCorrect++;//只是记录答对次数
+            } else {
+                messageResId = R.string.incorrect_toast;
+            }
         }
 
         mQuestionBank[mCurrentIndex].setAnswered(true);//判断完正误之后就调用接受参数的方法改变Boolean值
