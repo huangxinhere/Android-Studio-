@@ -18,11 +18,13 @@ public class CheatActivity extends AppCompatActivity {
 
     private static final String TAG = "CheatActivity";
     private static final String EXTRA_ANSWER_IS_TRUE = "com.example.quizeactivity.answer_is_true";
+    private static final String EXTRA_CHEAT_CHANCE = "com.example.CheatActivity.cheat_chance";
     private static final String EXTRA_ANSWER_SHOWN = "com.example.quizeactivity.answer_shown";
     private static final String SAVE_IS_CHEAT = "saveIsCheat";
     private boolean mAnswerIsTrue;
-    //private boolean isAnswerShown;//原想法：直接把是否显示答案放进键值
+    //private boolean isAnswerShown;//原想法：直接把是否显示答案放进键值；这个变量的意义是答案对误，而不是回答与否
     private boolean cheatedFlag = false;//默认没有作弊
+    private int mCheatChance;
 
     private TextView mAnswerTextView;
     private Button mShowAnswerButton;
@@ -38,23 +40,27 @@ public class CheatActivity extends AppCompatActivity {
 
         if (savedInstanceState != null){
             cheatedFlag = savedInstanceState.getBoolean(SAVE_IS_CHEAT);
-            setAnswerShownResult(cheatedFlag);//问题,怎么确定是否作弊？
+            setAnswerShownResult(cheatedFlag);//问题,怎么确定是否作弊？——点击check按钮就使其为true
         }
 
         //getIntent方法返回了由startActivity转发的Intent对象
+        mCheatChance = getIntent().getIntExtra(EXTRA_CHEAT_CHANCE,3);
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE,false); //后者为什么是默认的？不能是空值吗；前者怎么就知道正确答案呢？难道是getintent就得到数组对象
-        mAnswerTextView = (TextView) findViewById(R.id.answer_text_view);//结合布局的textView，显示什么？
+        mAnswerTextView = (TextView) findViewById(R.id.answer_text_view);//结合布局的textView，显示答案的所在区域
 
         mShowAnswerButton = (Button) findViewById(R.id.show_answer_button);//结合布局
         mShowAnswerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mCheatChance--;
+
                 if (mAnswerIsTrue){
-                    mAnswerTextView.setText(R.string.true_button);//引对错按钮的响应执行——toast
+                    mAnswerTextView.setText(R.string.true_button);//根据传来的对错引用按钮的字符串
                 }else{
                     mAnswerTextView.setText(R.string.false_button);
                 }
                 setAnswerShownResult(true);
+                cheatedFlag = true;
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
                     int cx = mShowAnswerButton.getWidth() / 2;
@@ -91,6 +97,7 @@ public class CheatActivity extends AppCompatActivity {
     private void setAnswerShownResult(boolean isAnswerShown){
         Intent data = new Intent();
         data.putExtra(EXTRA_ANSWER_SHOWN,isAnswerShown);
+        data.putExtra(EXTRA_CHEAT_CHANCE,mCheatChance);
         setResult(RESULT_OK,data);//子代码回发结果代码（区别不同的子activity）+附加的信息
     }
 

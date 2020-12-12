@@ -20,9 +20,11 @@ import static com.example.quizeactivity.R.id.pre_button;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "QuizActivity";//日志查看生命周期
+    private static final String EXTRA_CHEAT_CHANCE = "com.example.CheatActivity.cheat_chance";
     private static final String KEY_INDEX="index";
     private static final String KEY_ANSWERED = "answered";
     private static final String KEY_CORRECT = "correct";
+    private static final String KEY_IS_CHEATER = "isCheater";
     private static final int REQUEST_CODE_CHEAT = 0;
     private Button mTrueButton;
     private Button mFalseButton;//实例
@@ -30,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton mPreButton;
     private Button mCheatButton;
     private TextView mQuestionTextView;
+    private TextView mCheatChanceTextView;
     private int userAnsweredCorrect = 0;//记录答对的题目数量
+    private int mCheatChance = 3;
 
     //数组对象是Question类的对象，所以不停的构造;然后引用的字符串资源是整型；对象与对象之间要用逗号隔开
     private Question[] mQuestionBank= new Question[]{
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null){//检验存储的bundle信息
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);//存储成功的话，
             userAnsweredCorrect = savedInstanceState.getInt(KEY_CORRECT);//放在这？
+            mIsCheater = savedInstanceState.getBoolean(KEY_IS_CHEATER);
         }
 
         mQuestionTextView=(TextView) findViewById(R.id.question_text_view);//理解是把视图的test引为这里的实例
@@ -97,9 +102,12 @@ public class MainActivity extends AppCompatActivity {
                 //为了附加信息，注释掉Intent intent = new Intent(MainActivity.this,CheatActivity.class);
                 boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();//提取布尔值
                 Intent intent = CheatActivity.newIntent(MainActivity.this,answerIsTrue);//布尔值给子activity作为他的intent，而intent由基本（包名、）增加
+                intent.putExtra(EXTRA_CHEAT_CHANCE,mCheatChance);//这次是ma打包增加的信息过去，所以StringName在这里定义
                 startActivityForResult(intent,REQUEST_CODE_CHEAT);//带有返回要求的启动方法
             }
         });
+
+        mCheatChanceTextView = (TextView) findViewById(R.id.show_cheat_chance);
 
         mNextButton = (ImageButton) findViewById(R.id.next_button);
         mNextButton.setOnClickListener(new View.OnClickListener() {
@@ -142,12 +150,19 @@ public class MainActivity extends AppCompatActivity {
             }
         }//if语句在干嘛？要求同时满足结果代码和请求代码才赋值解析的结果
         mIsCheater = CheatActivity.wasAnswerShown(data);
+        mCheatChance = data.getIntExtra(EXTRA_CHEAT_CHANCE,0);
     }
 
 /************************************************************************************/
     @Override
     public void onStart(){
         super.onStart();
+        if (mCheatChance == 0){//返回主页面，又是start开始
+            mCheatButton.setEnabled(false);
+            mCheatChanceTextView.setText("No chance"+" times left");
+        }else{
+            mCheatChanceTextView.setText(mCheatChance + "time(s) left");
+        }
         Log.d(TAG,"onStart（） called");
     }
 
@@ -169,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);//？？？？对应index,
         savedInstanceState.putInt(KEY_CORRECT,userAnsweredCorrect);
+        savedInstanceState.putBoolean(KEY_IS_CHEATER,mIsCheater);
 
         if (savedInstanceState != null) {//问题：为什么要以这个作为条件？
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);//问题：这个有什么用
