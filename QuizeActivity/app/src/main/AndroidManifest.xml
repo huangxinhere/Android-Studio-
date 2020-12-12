@@ -10,9 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".CheatActivity"
-                  android:exported="true">
-                   </activity>
+                  android:configChanges="orientation|keyboardHidden|screenSize"
+                  android:exported="true">//这个解决了什么问题来着？上主要作用是：是否支持其它应用调用当前组件//上面那句解决不了水平崩溃的问题？
+                   </activity>//当指定了android:configChanges="orientation"后,方向改变时onConfigurationChanged被调用,并且activity不再销毁重建
         <activity android:name=".MainActivity"
+                  android:configChanges="orientation|keyboardHidden|screenSize"
                   android:exported = "true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -48,11 +48,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate(Bundle) called");
         setContentView(R.layout.activity_main);//https://www.cnblogs.com/Chenshuai7/p/5290918.html有详细介绍
-        /*   userAnsweredCorrect = savedInstanceState.getInt(KEY_CORRECT);//取出数据之后app运行不了？？*/
+//        userAnsweredCorrect = savedInstanceState.getInt(KEY_CORRECT);//如何取出数据?错误：Null PointerException，Attempt to invoke virtual method…方法返回了空值
 
-        if (savedInstanceState != null){//检验存储的bundle信息????
-            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
-        }//好像又反过来赋值了
+        if (savedInstanceState != null){//检验存储的bundle信息
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);//存储成功的话，
+            userAnsweredCorrect = savedInstanceState.getInt(KEY_CORRECT);//放在这？
+        }
 
         mQuestionTextView=(TextView) findViewById(R.id.question_text_view);//理解是把视图的test引为这里的实例
         mQuestionTextView.setOnClickListener(new View.OnClickListener() {
@@ -169,10 +170,8 @@ public class MainActivity extends AppCompatActivity {
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);//？？？？对应index,
         savedInstanceState.putInt(KEY_CORRECT,userAnsweredCorrect);
 
-        if (savedInstanceState != null) {//问题：什么东西？
-
-            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
-
+        if (savedInstanceState != null) {//问题：为什么要以这个作为条件？
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);//问题：这个有什么用
             boolean answerIsAnswered[] = new boolean[mQuestionBank.length];
             for (int i = 0; i < mQuestionBank.length; i++) {
                 answerIsAnswered[i] = mQuestionBank[i].isAnswered();
