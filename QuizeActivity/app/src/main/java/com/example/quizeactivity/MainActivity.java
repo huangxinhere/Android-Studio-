@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         mQuestionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                mCurrentIndex = (mCurrentIndex+1) % mQuestionBank.length;//我觉得要首先变成按钮才有互动的窗口/不是，不需要
+                mCurrentIndex = (mCurrentIndex+1) % mQuestionBank.length;
                 updateQuestion();
             }
         });
