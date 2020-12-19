@@ -21,7 +21,7 @@ public class CrimeLab {
 
     /*新建List将包含用户自建的Crime*/
     private CrimeLab(Context context) {
-        mCrimes = new ArrayList<>();//初始化？
+        mCrimes = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             Crime crime = new Crime();
             crime.setTitle("Crime #" + i);
@@ -36,7 +36,7 @@ public class CrimeLab {
     }
 
     /*返回带指定ID的Crime对象*/
-    public Crime getCrime(UUID id){//问题：UUID是什么，要引入java.util.UUID;答:工具类
+    public Crime getCrime(UUID id){//UUID要引入java.util.UUID
         for (Crime crime : mCrimes){
             if (crime.getId().equals(id)){
                 return crime;
