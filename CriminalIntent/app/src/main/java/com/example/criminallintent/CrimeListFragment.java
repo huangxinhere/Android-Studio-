@@ -17,9 +17,6 @@ import java.util.List;
 public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
-    private Crime mCrime;
-    private TextView mTitleTextView;
-    private TextView mDateTextView;
 
     @Override/*使用布局并找到布局中的RecyclerView视图*/
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,15 +44,20 @@ public class CrimeListFragment extends Fragment {
     }
 
     /*定义ViewHolder内部类：实例化并使用list_item_crime布局*/
-    private class CrimeHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
+    private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView mTitleTextView;
+        private TextView mDateTextView;
+
+        private Crime mCrime;
+
         public CrimeHolder(LayoutInflater inflater,ViewGroup parent){
             super(inflater.inflate(R.layout.list_item_crime,parent,false));
+            View itemView = inflater.inflate(R.layout.list_item_crime,parent,false);
             itemView.setOnClickListener(this);//itemView是什么？和之前的设置监听器有什么不同？
 
             /*实例化组件：在哪实例化？现在在内部类里；相关的布局中？/如何实例化？和平常的有何不同？*/
-            mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
-            mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
+            mTitleTextView = itemView.findViewById(R.id.textView);
+            mDateTextView = itemView.findViewById(R.id.crime_date);
         }
 
         /*只要取到一个Crime，CrimeHolder就会刷新显示TextView标题视图和TextView日期视图;bind:捆绑，捆绑组件和数据*/
