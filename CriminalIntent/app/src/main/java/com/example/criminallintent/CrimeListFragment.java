@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,13 +18,14 @@ import java.util.List;
 public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
+    private ImageView mSolvedImageView;
 
     @Override/*使用布局并找到布局中的RecyclerView视图*/
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_crime_list,container,false);//假想相关布局文件、容器、布尔值放在inflate（加载布局的系统服务）熔炉里面锻造出View类的对象
 
-        /*创建布局/的实例化？与创建view相比，为什么这个引用id，上面引用文件名？*/
+        /*创建布局的实例化*/
         mCrimeRecyclerView = (RecyclerView) view//这个view就是前面创建的view，它包含的文件再取出id？
                 .findViewById(R.id.crime_recycle_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));//启动一个activity，就需要拿到activity对象才可以启动，而fragment对象是没有startActivity()方法的
@@ -45,10 +47,9 @@ public class CrimeListFragment extends Fragment {
 
     /*定义ViewHolder内部类：实例化并使用list_item_crime布局*/
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private Crime mCrime;
         private TextView mTitleTextView;
         private TextView mDateTextView;
-
-        private Crime mCrime;
 
         public CrimeHolder(LayoutInflater inflater,ViewGroup parent){
             super(inflater.inflate(R.layout.list_item_crime,parent,false));
@@ -58,13 +59,15 @@ public class CrimeListFragment extends Fragment {
             /*实例化组件：在哪实例化？现在在内部类里；相关的布局中？/如何实例化？和平常的有何不同？*/
             mTitleTextView = itemView.findViewById(R.id.textView);
             mDateTextView = itemView.findViewById(R.id.crime_date);
+            mSolvedImageView = itemView.findViewById(R.id.crime_solved);
         }
 
         /*只要取到一个Crime，CrimeHolder就会刷新显示TextView标题视图和TextView日期视图;bind:捆绑，捆绑组件和数据*/
         public void bind(Crime crime){
             mCrime = crime;
-            mTitleTextView.setText(mCrime.getTitle());//出现了什么错误啊到底……
+            mTitleTextView.setText(mCrime.getTitle());//之前打错字，然后弄出默认的空的view值，一直报错
             mDateTextView.setText(mCrime.getDate().toString());
+            mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
         }
 
         @Override
