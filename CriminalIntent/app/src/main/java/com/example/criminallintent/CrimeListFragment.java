@@ -1,6 +1,7 @@
 package com.example.criminallintent;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class CrimeListFragment extends Fragment {
+    private static final String TAG = "CrimeListFragment";
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
     private ImageView mSolvedImageView;
@@ -28,10 +30,9 @@ public class CrimeListFragment extends Fragment {
         /*创建布局的实例化*/
         mCrimeRecyclerView = (RecyclerView) view//这个view就是前面创建的view，它包含的文件再取出id？
                 .findViewById(R.id.crime_recycle_view);
+        updateUI();//有crimes，有adapter，有ViewHolder
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));//启动一个activity，就需要拿到activity对象才可以启动，而fragment对象是没有startActivity()方法的
         /*RecyclerView视图创建完成后，就立即转交给了LayoutManager对象,LM负责放置和屏幕滚动*/
-
-        updateUI();//有crimes，有adapter，有ViewHolder
 
         return view;//返回给托管的activity？
     }
@@ -45,15 +46,43 @@ public class CrimeListFragment extends Fragment {
         mCrimeRecyclerView.setAdapter(mAdapter);
     }
 
+    /*Adapter:显示新创建的ViewHolder或让Crime对象和已创建的ViewHolder关联*/
+    private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder>{
+        private List<Crime> mCrimes;
+
+        public CrimeAdapter(List<Crime> crimes){
+            mCrimes = crimes;
+        }
+
+        @NonNull
+        @Override
+        public CrimeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+           LayoutInflater layoutInflater = LayoutInflater.from(getActivity());//菜鸟教程里有关于LayoutInflater,创建每一项的布局
+           View view=layoutInflater.inflate(R.layout.list_item_crime,parent,false);
+           return new CrimeHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull CrimeHolder holder, int position) {
+            Crime crime = mCrimes.get(position);//数组里面int参数原来是索引，也就是CrimeLab类里面得到相应ID的方法
+            holder.bind(crime);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mCrimes.size();
+        }
+    }
+
+    /*CrimeHolder写在CrimeAdapter里面，更容易看*/
     /*定义ViewHolder内部类：实例化并使用list_item_crime布局*/
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private Crime mCrime;
         private TextView mTitleTextView;
         private TextView mDateTextView;
 
-        public CrimeHolder(LayoutInflater inflater,ViewGroup parent){
-            super(inflater.inflate(R.layout.list_item_crime,parent,false));
-            View itemView = inflater.inflate(R.layout.list_item_crime,parent,false);
+        public CrimeHolder(@NonNull View itemView){
+            super(itemView);
             itemView.setOnClickListener(this);//itemView是什么？和之前的设置监听器有什么不同？
 
             /*实例化组件：在哪实例化？现在在内部类里；相关的布局中？/如何实例化？和平常的有何不同？*/
@@ -68,6 +97,7 @@ public class CrimeListFragment extends Fragment {
             mTitleTextView.setText(mCrime.getTitle());//之前打错字，然后弄出默认的空的view值，一直报错
             mDateTextView.setText(mCrime.getDate().toString());
             mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
+            Log.d(TAG,"title:"+crime.getTitle()+"date:"+crime.getDate().toString());
         }
 
         @Override
@@ -75,34 +105,6 @@ public class CrimeListFragment extends Fragment {
             Toast.makeText(getActivity(),
                     mCrime.getTitle() + "clicked!", Toast.LENGTH_SHORT)
                     .show();
-        }
-    }
-
-    /*Adapter:显示新创建的ViewHolder或让Crime对象和已创建的ViewHolder关联*/
-    private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder>{
-        private List<Crime> mCrimes;
-
-        public CrimeAdapter(List<Crime> crimes){
-            mCrimes = crimes;
-        }
-
-        @NonNull
-        @Override
-        public CrimeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-           LayoutInflater layoutInflater = LayoutInflater.from(getActivity());//菜鸟教程里有关于LayoutInflater
-
-            return new CrimeHolder(layoutInflater,parent);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull CrimeHolder holder, int position) {
-            Crime crime = mCrimes.get(position);//数组里面int参数原来是索引，也就是CrimeLab类里面得到相应ID的方法
-            holder.bind(crime);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mCrimes.size();
         }
     }
 }
