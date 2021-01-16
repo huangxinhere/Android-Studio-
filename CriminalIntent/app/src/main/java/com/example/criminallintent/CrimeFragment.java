@@ -16,6 +16,8 @@ import android.widget.RadioGroup;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import java.util.UUID;
+
 public class CrimeFragment extends Fragment{
     private Crime mCrime;
     private EditText mTitleField;
@@ -25,7 +27,10 @@ public class CrimeFragment extends Fragment{
     @Override
     public void onCreate(Bundle saveInstanceState){//也具有保存及获取状态的bundle
         super.onCreate(saveInstanceState);//覆盖方法的原因：Fragment生命周期方法必须是公共方法，因为托管fragment的activity要调用
-        mCrime = new Crime();
+    /*取得extra数据并取得crime对象*/
+        UUID crimeId = (UUID) getActivity().getIntent()
+                .getSerializableExtra(MainActivity.EXTRA_CRIME_ID);
+        mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
     }
 
     /*创建和配置fragment视图是另一个Fragment生命周期方法完成的*/
@@ -49,6 +54,7 @@ public class CrimeFragment extends Fragment{
         mDateButton.setEnabled(false);
 
         mTitleField = (EditText) v.findViewById(R.id.crime_title);
+        mTitleField.setText(mCrime.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {//创建实现TextWatcher监听器接口的匿名内部类？
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -67,6 +73,7 @@ public class CrimeFragment extends Fragment{
         });
 
         mSolvedCheckBox = (CheckBox) v.findViewById(R.id.crime_solved);
+        mSolvedCheckBox.setChecked(mCrime.isSolved());
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {//compound混合物，复合物；为什么就要选这种？
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

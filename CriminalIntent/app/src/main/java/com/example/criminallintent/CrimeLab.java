@@ -37,7 +37,7 @@ public class CrimeLab {
     }
 
     /*返回带指定ID的Crime对象*/
-    public Crime getCrime(UUID id){//UUID要引入java.util.UUID
+    public Crime getCrime(UUID id){
         for (Crime crime : mCrimes){
             if (crime.getId().equals(id)){
                 return crime;
