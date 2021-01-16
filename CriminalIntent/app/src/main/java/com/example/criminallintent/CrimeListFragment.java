@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DateFormat;
 import java.util.List;
 
 public class CrimeListFragment extends Fragment {
@@ -94,8 +95,10 @@ public class CrimeListFragment extends Fragment {
         /*只要取到一个Crime，CrimeHolder就会刷新显示TextView标题视图和TextView日期视图;bind:捆绑，捆绑组件和数据*/
         public void bind(Crime crime){
             mCrime = crime;
+            String date;
+            date = (String) DateFormat.getDateInstance(DateFormat.FULL).format(mCrime.getDate());
             mTitleTextView.setText(mCrime.getTitle());//之前打错字，然后弄出默认的空的view值，一直报错
-            mDateTextView.setText(mCrime.getDate().toString());
+            mDateTextView.setText(date);
             mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
             Log.d(TAG,"title:"+crime.getTitle()+"date:"+crime.getDate().toString());
         }
