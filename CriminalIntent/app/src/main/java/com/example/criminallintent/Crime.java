@@ -6,10 +6,10 @@ import java.util.UUID;
 
 public class Crime {
 
-    private UUID mId;//Java工具类，有何用？
+    private UUID mId;
     private String mTitle;
     private Date mDate;
-    private boolean mSolved;//什么意思来着？
+    private boolean mSolved;
 
     public UUID getId() {
         return mId;

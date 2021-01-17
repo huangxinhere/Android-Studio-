@@ -23,6 +23,7 @@ public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
     private ImageView mSolvedImageView;
+    private static int itemPosition;
 
     @Override/*使用布局并找到布局中的RecyclerView视图*/
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,7 +37,7 @@ public class CrimeListFragment extends Fragment {
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));//启动一个activity，就需要拿到activity对象才可以启动，而fragment对象是没有startActivity()方法的
         /*RecyclerView视图创建完成后，就立即转交给了LayoutManager对象,LM负责放置和屏幕滚动*/
 
-        return view;//返回给托管的activity？
+        return view;
     }
 
     /*在onResume（）方法中刷新列表项*/
@@ -52,10 +53,10 @@ public class CrimeListFragment extends Fragment {
         List<Crime> crimes = crimeLab.getCrimes();//获取数组列表
 
     if (mAdapter == null) {
-        mAdapter = new CrimeAdapter(crimes);//创建对象：类加实例
+        mAdapter = new CrimeAdapter(crimes);
         mCrimeRecyclerView.setAdapter(mAdapter);
         }else {
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemChanged(itemPosition);
         }
     }
 
@@ -119,6 +120,7 @@ public class CrimeListFragment extends Fragment {
         @Override
         public void onClick(View view){
             Intent intent = MainActivity.newIntent(getActivity(), mCrime.getId());
+            itemPosition = getBindingAdapterPosition();
             startActivity(intent);
         }
     }
