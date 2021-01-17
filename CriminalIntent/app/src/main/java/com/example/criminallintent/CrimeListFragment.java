@@ -39,14 +39,26 @@ public class CrimeListFragment extends Fragment {
         return view;//返回给托管的activity？
     }
 
+    /*在onResume（）方法中刷新列表项*/
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateUI();
+    }
+
     /*关联Adapter和RecyclerView：创建CrimeAdapter，设置给RecyclerView*/
     private void updateUI(){
         CrimeLab crimeLab = CrimeLab.get(getActivity());//返回或构造crimeLab，似乎是CrimeLab类的唯一指定对象；然后才能用它的方法？public……？
-        List<Crime> crimes = crimeLab.getCrimes();//返回数组数组列表。为什么不直接创建数组？
+        List<Crime> crimes = crimeLab.getCrimes();//获取数组列表
 
+    if (mAdapter == null) {
         mAdapter = new CrimeAdapter(crimes);//创建对象：类加实例
         mCrimeRecyclerView.setAdapter(mAdapter);
+        }else {
+            mAdapter.notifyDataSetChanged();
+        }
     }
+
 
     /*Adapter:显示新创建的ViewHolder或让Crime对象和已创建的ViewHolder关联*/
     private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder>{
