@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentManager;
 
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 
-    /*从activity_fragment.xml布局里实例化activity视图？*/
+    /*实例化activity_fragment视图:含fragment container，通用*/
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
