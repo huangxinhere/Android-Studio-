@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG ="wMainActivity ";
+    private static final String TAG ="MainActivity ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
