@@ -15,7 +15,7 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
 
     /*然后在容器中查找FragmentManager里的fragment。如果找不到，就新建fragment并将其添加到容器中*/
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container);//这个容器视图是为了找fragment
 
         if (fragment == null){
             fragment = createFragment();

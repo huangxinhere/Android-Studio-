@@ -28,9 +28,8 @@ public class CrimeListFragment extends Fragment {
     @Override/*使用布局并找到布局中的RecyclerView视图*/
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.fragment_crime_list,container,false);//假想相关布局文件、容器、布尔值放在inflate（加载布局的系统服务）熔炉里面锻造出View类的对象
+        View view = inflater.inflate(R.layout.fragment_crime_list,container,false);//fragment_crime_list是RecyclerView视图
 
-        /*创建布局的实例化*/
         mCrimeRecyclerView = (RecyclerView) view//这个view就是前面创建的view，它包含的文件再取出id？
                 .findViewById(R.id.crime_recycle_view);
         updateUI();//有crimes，有adapter，有ViewHolder
@@ -100,7 +99,7 @@ public class CrimeListFragment extends Fragment {
             super(itemView);
             itemView.setOnClickListener(this);//itemView是什么？和之前的设置监听器有什么不同？
 
-            /*实例化组件：在哪实例化？现在在内部类里；相关的布局中？/如何实例化？和平常的有何不同？*/
+            //在构造器里实例化组件；
             mTitleTextView = itemView.findViewById(R.id.textView);
             mDateTextView = itemView.findViewById(R.id.crime_date);
             mSolvedImageView = itemView.findViewById(R.id.crime_solved);

@@ -20,8 +20,8 @@ public class MainActivity extends SingleFragmentActivity{
                 .getSerializableExtra(EXTRA_CRIME_ID);
         return CrimeFragment.newInstance(crimeId);
     }
-    /*putExtra()所需的键名*/
 
+    /*putExtra()所需的键名*/
     public static Intent newIntent(Context packageContext, UUID crimeId){
         Intent intent = new Intent(packageContext, MainActivity.class);
         intent.putExtra(EXTRA_CRIME_ID, crimeId);
