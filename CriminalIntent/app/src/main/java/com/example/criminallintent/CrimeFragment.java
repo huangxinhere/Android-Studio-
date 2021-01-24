@@ -71,6 +71,8 @@ public class CrimeFragment extends Fragment{
                 DatePickerFragment dialog = new DatePickerFragment();
                 dialog.show(manager,DIALOG_DATE);
             }
+
+
         });
 
         mTitleField = (EditText) v.findViewById(R.id.crime_title);
