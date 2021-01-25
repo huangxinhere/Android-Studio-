@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ public class CrimeFragment extends Fragment{
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0 ;
+    private static final String TAG = "CrimeFragment" ;
 
     private Crime mCrime;
     private EditText mTitleField;
@@ -46,6 +48,13 @@ public class CrimeFragment extends Fragment{
     public void onCreate(Bundle saveInstanceState){//也具有保存及获取状态的bundle
         super.onCreate(saveInstanceState);//覆盖方法的原因：Fragment生命周期方法必须是公共方法，因为托管fragment的activity要调用
     /*取得extra数据并取得crime对象*/
+        Bundle arguments = getArguments();
+        if (arguments != null){
+            Log.d(TAG,"arguments is " + arguments.toString());
+        }else{
+            Log.d(TAG,"no arguments!!!!!!!!");
+        }
+
         UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
     }
@@ -56,16 +65,7 @@ public class CrimeFragment extends Fragment{
         View v = inflater.inflate(R.layout.fragment_crime,container,false);
         //调用Lay..方法,传入资源ID/视图的父视图
     /*前两者是实例化布局的必要参数//实例化的View返回给托管activity*/
-
-        FragmentManager fm = getFragmentManager();/*getFragmentManager()所得到的是所在fragment 的父容器的管理器，getChildFragmentManager()所得到的是在fragment  里面子容器的管理器。3.0版本后可直接使用第一个*/
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);/*获得管理的fragment；容器视图资源ID：告诉FragmentManager，fragment视图应该出现在activity视图的什么位置；唯一标识FragmentManager队列中的fragment*/
-
-        if (fragment == null){
-            fragment = new CrimeFragment();
-    /*创建并提交一个fragment事务：添加、移除、附加、分离或替换fragment队列中的fragment——动态组装/重新组装用户界面*/
-            fm.beginTransaction().add(R.id.fragment_container,fragment).commit();
-        }
-
+        
         mDateButton = (Button) v.findViewById(R.id.crime_date);
         upDate();
         mDateButton.setOnClickListener(new View.OnClickListener(){
