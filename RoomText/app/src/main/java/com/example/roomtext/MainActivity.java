@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     TextView textView;
     Button insert,delete,update,clear,query;
     String text;
-
+//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
