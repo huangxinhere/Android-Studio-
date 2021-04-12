@@ -4,6 +4,7 @@ import android.app.AppComponentFactory;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,7 @@ public class CrimePagerActivity extends AppCompatActivity {
 
     private static final String EXTRA_CRIME_ID =
             "com.example.criminalIntent.crime_id";
+    private static final String TAG = "PagerActivity";
     private ViewPager mViewPager;
     private List<Crime> mCrimes;
 
@@ -46,6 +48,7 @@ public class CrimePagerActivity extends AppCompatActivity {
             @Override
             public Fragment getItem(int position) {
                 Crime crime = mCrimes.get(position);
+                Log.e(TAG,"crime启动的Id是  "+crime.getId()+"--------------"+position);
                 return CrimeFragment.newInstance(crime.getId());
             }
 

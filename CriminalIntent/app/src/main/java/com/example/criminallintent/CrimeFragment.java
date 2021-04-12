@@ -23,7 +23,7 @@ import androidx.fragment.app.FragmentManager;
 import java.util.Date;
 import java.util.UUID;
 
-public class CrimeFragment extends Fragment{
+public class CrimeFragment extends Fragment {
 
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
@@ -49,23 +49,17 @@ public class CrimeFragment extends Fragment{
         super.onCreate(saveInstanceState);//覆盖方法的原因：Fragment生命周期方法必须是公共方法，因为托管fragment的activity要调用
     /*取得extra数据并取得crime对象*/
         Bundle arguments = getArguments();
-        if (arguments != null){
-            Log.d(TAG,"arguments is " + arguments.toString());
-        }else{
-            Log.d(TAG,"no arguments!!!!!!!!");
-        }
 
         UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
+        Log.e(TAG,"开始的id是 "+crimeId);
     }
 
-    /*创建和配置fragment视图是另一个Fragment生命周期方法完成的*/
-    /*该方法实例化fragment视图的布局*/
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle saveInstanceState){
         View v = inflater.inflate(R.layout.fragment_crime,container,false);
-        //调用Lay..方法,传入资源ID/视图的父视图
-    /*前两者是实例化布局的必要参数//实例化的View返回给托管activity*/
-        
+
+        //Log.e(TAG,"------------"+mCrime.getTitle());
         mDateButton = (Button) v.findViewById(R.id.crime_date);
         upDate();
         mDateButton.setOnClickListener(new View.OnClickListener(){
@@ -82,6 +76,7 @@ public class CrimeFragment extends Fragment{
         });
 
         mTitleField = (EditText) v.findViewById(R.id.crime_title);
+        Log.e(TAG,"最终使用的id是"+ mCrime.getId()+ mCrime.getTitle());
         mTitleField.setText(mCrime.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {//创建实现TextWatcher监听器接口的匿名内部类？
             @Override
