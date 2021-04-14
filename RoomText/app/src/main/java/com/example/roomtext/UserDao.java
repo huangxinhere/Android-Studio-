@@ -2,6 +2,7 @@ package com.example.roomtext;
 
 import android.app.DownloadManager;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -14,7 +15,10 @@ import java.util.List;
 public interface UserDao {
     //获取所有数据
     @Query("SELECT * FROM user")
-    List<User> getAll();
+    LiveData<List<User>> getAll();
+    //删除所有数据
+    @Query("DELETE FROM user")
+    void deleteAll();
 
     @Query("SELECT * FROM user WHERE uid IN (:userIds)")
     List<User> loadAllByIds(int[] userIds);

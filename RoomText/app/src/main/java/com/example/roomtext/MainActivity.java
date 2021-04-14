@@ -1,5 +1,6 @@
 package com.example.roomtext;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -7,6 +8,12 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.util.Log;
@@ -21,24 +28,32 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MA";
+    private UserViewModel mUserViewModel;
     UserDao userDao;
     TextView textView;
-    Button insert,delete,update,clear,query;
+    Button insert, delete, update, clear, query;
     String text;
-//
+
+    //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-    //把数据库操作加入到主线程中。安卓不允许把数据库操作加入到主线程中。解决——第四行
-        AppDataBase appDataBase;
-        appDataBase = Room.databaseBuilder(getApplicationContext(),
-                AppDataBase.class,"database_happy")//name:数据库保存之后文件的文件名
-                .allowMainThreadQueries()//允许在主线程中查询
-                .build();//返回实体来取得Dao的实体
+        RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        final UserListAdapter adapter = new UserListAdapter(this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        userDao = appDataBase.userDao();//抽象类和方法的实例化？
+        mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        mUserViewModel.getAllUsers().observe(this, new Observer<List<User>>() {
+            @Override
+            public void onChanged(List<User> users) {
+                adapter.setUsers(users);
+            }
+        });
+
+        /*userDao = appDataBase.userDao();//抽象类和方法的实例化？
     //UI
         textView = (TextView) findViewById(R.id.textView);
         insert = (Button) findViewById(R.id.insert);
@@ -87,8 +102,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void show() {
         //拿到数据库的所有数据
-        List<User> list = userDao.getAll();
-
+        LiveData<List<User>> list = userDao.getAll();
+//LiveData:you have to observe the data so that
+//when it changes, you can react.
         //逐条提取数据放置在text里
         StringBuilder text = new StringBuilder();
         for (User u:list){
@@ -96,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         }
         //展示
         textView.setText(text);
-    }
+    }*/
 
+    }
 }
