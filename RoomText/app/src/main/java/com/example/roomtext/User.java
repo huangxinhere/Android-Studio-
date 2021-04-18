@@ -16,6 +16,9 @@ public class User {
 
     public User() {
     }
+    public User(String firstName){
+        this.firstName = firstName;
+    }
 
     @PrimaryKey(autoGenerate = true)//生成id？
     private int uid;
