@@ -11,6 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 @Database(entities = {User.class},version = 1,exportSchema = false)
 public abstract class AppDataBase extends RoomDatabase {
+
     public abstract UserDao userDao();
     private static AppDataBase INSTANCE;
 //创建这个类利用单例。有这个类，就有Instance，还可以避免有很多实例
@@ -18,7 +19,6 @@ public abstract class AppDataBase extends RoomDatabase {
         //类第一次没有被创建
         if (INSTANCE == null){
             synchronized (AppDataBase.class){
-                //
                 if (INSTANCE == null){
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             AppDataBase.class,"database_happy")//name:数据库保存之后文件的文件名
@@ -27,7 +27,7 @@ public abstract class AppDataBase extends RoomDatabase {
                             //修改数据库架构的时候要更新版本号还有调整改变？
                             // Wipes and rebuilds instead of migrating
                             .fallbackToDestructiveMigration()
-                            //.addCallback(sCallback);
+                            .addCallback(sCallback)
                             .build();//返回实体来取得Dao的实体
                 }
             }
@@ -38,7 +38,7 @@ public abstract class AppDataBase extends RoomDatabase {
 // whenever the app is started
     private static RoomDatabase.Callback sCallback =
         new RoomDatabase.Callback(){
-
+        @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db){
             super.onOpen(db);
             new PopulateDbAsync(INSTANCE).execute();

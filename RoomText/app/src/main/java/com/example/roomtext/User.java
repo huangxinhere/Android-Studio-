@@ -13,9 +13,10 @@ public class User {
         this.lastName = last;
     }
     //@NonNull: the parameter can never be null.
-    public User(){
 
+    public User() {
     }
+
     @PrimaryKey(autoGenerate = true)//生成id？
     private int uid;
 
