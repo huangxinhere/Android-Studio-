@@ -1,6 +1,4 @@
-package com.example.roomtext;
-
-import android.app.DownloadManager;
+package com.example.roomtext.Room;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -27,6 +25,9 @@ public interface UserDao {
     @Query("SELECT * FROM user WHERE first_name LIKE :first AND "
     + "last_name LIKE :last LIMIT 1")
     User findByName(String first,String last);
+
+    @Query("SELECT * FROM user LIMIT 1")
+    User[] getOneUser();
 
     @Insert
     void insertAll(User... users);

@@ -1,4 +1,4 @@
-package com.example.roomtext;
+package com.example.roomtext.Room;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.roomtext.R;
 
 import java.util.List;
 
@@ -57,5 +59,9 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.WordVi
             super(itemView);
             wordItemView = itemView.findViewById(R.id.textView);
         }
+    }
+
+    public User getUserAtPosition(int position){
+        return mUsers.get(position);
     }
 }

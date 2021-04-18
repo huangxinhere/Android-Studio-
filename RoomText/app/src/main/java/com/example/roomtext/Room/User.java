@@ -1,4 +1,4 @@
-package com.example.roomtext;
+package com.example.roomtext.Room;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -8,12 +8,16 @@ import androidx.room.PrimaryKey;
 @Entity//这个类是表
 public class User {
 
-    public User(@NonNull String first, String last){
+    /*public User(@NonNull String first, String last){
         this.firstName = first;
         this.lastName = last;
-    }
+    }*/
     //@NonNull: the parameter can never be null.
 
+    public User(int uid,@NonNull String User){
+        this.uid = uid;
+        this.firstName = User;
+    }
     public User() {
     }
     public User(String firstName){

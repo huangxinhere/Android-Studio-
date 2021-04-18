@@ -1,4 +1,4 @@
-package com.example.roomtext;
+package com.example.roomtext.Room;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -48,7 +48,7 @@ public abstract class AppDataBase extends RoomDatabase {
     private static class PopulateDbAsync extends AsyncTask<Void,Void,Void>{
 
         private final UserDao mDao;
-        String[] users = {"A","b","c"};
+        String[] users = {"Daming","Amy","Sam"};
 
         PopulateDbAsync(AppDataBase db){
             mDao = db.userDao();
@@ -58,13 +58,13 @@ public abstract class AppDataBase extends RoomDatabase {
             // Start the app with a clean database every time.
             // Not needed if you only populate the database
             // when it is first created
-            mDao.deleteAll();
-
-            for (int i = 0; i <= users.length - 1; i++){
-                User user = new User("##"+i,users[i]);
-                mDao.insertUser(user);
+            //mDao.deleteAll();
+            if (mDao.getOneUser().length < 1){
+                for (int i = 0; i <= users.length - 1; i++){
+                    User user = new User(users[i]);
+                    mDao.insertUser(user);
+                }
             }
-
             return null;
         }
     }

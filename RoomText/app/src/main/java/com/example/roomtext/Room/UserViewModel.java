@@ -1,4 +1,4 @@
-package com.example.roomtext;
+package com.example.roomtext.Room;
 
 import android.app.Application;
 
@@ -25,4 +25,14 @@ public class UserViewModel extends AndroidViewModel {
     public void insert(User user){
         mRepository.insert(user);
     }
+
+    public void deleteAll(){
+        mRepository.deleteAll();
+    }
+
+    public void deleteUser(User user){
+        mRepository.deleteUser(user);
+    }
+
+
 }
