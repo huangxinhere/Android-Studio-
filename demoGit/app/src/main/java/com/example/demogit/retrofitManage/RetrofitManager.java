@@ -27,8 +27,8 @@ public class RetrofitManager {
 
     private static Retrofit create(){
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.readTimeout(10, TimeUnit.SECONDS);//设置请求超时时间
-        builder.connectTimeout(9,TimeUnit.SECONDS);
+        builder.readTimeout(5, TimeUnit.SECONDS);//设置请求超时时间
+        builder.connectTimeout(5,TimeUnit.SECONDS);
         //??
         if (BuildConfig.DEBUG){
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();

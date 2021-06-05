@@ -40,11 +40,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull UserHolder holder, int position) {
-        if (items != null){
+        if (items != null)
             holder.bind(position,items.get(position));
-        }else {
+        else
             holder.name.setText("Error..");
-        }
     }
 
     @Override
@@ -78,11 +77,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserHolder> {
             fork_num.setText(item.getForks());
             star_num.setText(item.getStars());
 
-            if (position == opened){
+            if (position == opened)
                 cs_2.setVisibility(View.VISIBLE);
-            }else {
+            else
                 cs_2.setVisibility(View.GONE);
-            }
         }
 
         @Override
