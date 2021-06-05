@@ -18,7 +18,9 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.WordVi
     private final LayoutInflater mInflater;
     private List<User> mUsers; // Cached copy of words
 
-    UserListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
+    UserListAdapter(Context context) {
+        mInflater = LayoutInflater.from(context);
+    }
 
     @Override
     public WordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
