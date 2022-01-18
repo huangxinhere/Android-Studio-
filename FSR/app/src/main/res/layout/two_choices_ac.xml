@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradient_bg">
+
+
+        <ImageView
+            android:id="@+id/two_icon_imagev"
+            android:layout_width="153dp"
+            android:layout_height="78dp"
+            android:layout_marginStart="29dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="265dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/two_choices_icon" />
+
+        <ImageView
+            android:id="@+id/two_right_image"
+            android:layout_width="147dp"
+            android:layout_height="197dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="36dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/two_left_image"
+            app:layout_constraintTop_toBottomOf="@+id/two_icon_imagev"
+            app:srcCompat="@drawable/two_choices_right" />
+
+        <ImageView
+            android:id="@+id/two_left_image"
+            android:layout_width="147dp"
+            android:layout_height="196dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/two_icon_imagev"
+            app:srcCompat="@drawable/two_choices_left" />
+
+        <ImageView
+            android:id="@+id/two_rainbow_image"
+            android:layout_width="162dp"
+            android:layout_height="130dp"
+            android:layout_marginTop="54dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/two_choices_rainbow">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/two_text_image"
+            android:layout_width="391dp"
+            android:layout_height="249dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/two_left_image"
+            app:srcCompat="@drawable/two_choices_text" />
+
+        <Button
+            android:id="@+id/two_start_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="105dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="106dp"
+            android:background="@drawable/save_bg"
+            android:text="开始测验"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/two_text_image" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
