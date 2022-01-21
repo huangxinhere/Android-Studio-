@@ -1,2 +1,1 @@
-include ':app'
-rootProject.name = "MVP、"
+rootProject.name = "RoomText_02"
