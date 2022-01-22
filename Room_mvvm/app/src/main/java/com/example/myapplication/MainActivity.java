@@ -2,6 +2,8 @@ package com.example.myapplication;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,15 +11,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.room.Delete;
 import androidx.room.Room;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    WordDao wordDao;
-    WordDataBase wordDataBase;
-    LiveData<List<Word>> allWords;
+    WordViewModel viewModel;
 
     Button btn_insert,btn_delete,btn_clear,btn_update;
     TextView tv;
@@ -26,16 +27,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        wordDataBase = Room.databaseBuilder(this,WordDataBase.class,"word_database")
-                .allowMainThreadQueries()
-                .build();
-        wordDao = wordDataBase.getWordDao();
-        //第一次获取数据
-        allWords = wordDao.getAllWords();
+        viewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(WordViewModel.class);
+
         tv = findViewById(R.id.textView);
         
         //开始监听
-        allWords.observe(this, new Observer<List<Word>>() {
+        viewModel.getAllWordsLive().observe(this, new Observer<List<Word>>() {
             @Override
             public void onChanged(@Nullable List<Word> words) {
                 StringBuilder s = new StringBuilder();
@@ -55,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Word word1 = new Word("Hello","你好");
                 Word word2 = new Word("world","世界");
-                wordDao.insertWords(word1,word2);
+                viewModel.insertWord(word1,word2);
             }
         });
 
@@ -63,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         btn_clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                wordDao.deleteAllWords();
+                viewModel.clearWord();
             }
         });
 
@@ -73,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Word word = new Word("Hi","泥猴啊！");
                 word.setId(20);
-                wordDao.updateWords(word);
+                viewModel.updateWord(word);
             }
         });
 
@@ -83,10 +80,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Word word = new Word("Hi","泥猴啊！");
                 word.setId(17);
-                wordDao.deleteWords(word);
+                viewModel.deleteWord(word);
             }
         });
     }
-
 
 }
