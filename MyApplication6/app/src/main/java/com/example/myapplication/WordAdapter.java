@@ -13,6 +13,11 @@ import java.util.List;
 
 public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordHolder> {
     private List<Word> allWords = new ArrayList<>();
+    private Boolean isCardView;
+
+    public WordAdapter(Boolean isCardView) {
+        this.isCardView = isCardView;
+    }
 
     public void setAllWords(List<Word> allWords) {
         this.allWords = allWords;
@@ -22,7 +27,11 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordHolder> {
     @Override
     public WordHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View itemView = inflater.inflate(R.layout.cell_normal,parent,false);
+        View itemView;
+        if (isCardView){
+            itemView = inflater.inflate(R.layout.cell_card,parent,false);
+        } else
+            itemView = inflater.inflate(R.layout.cell_normal,parent,false);
         return new WordHolder(itemView);
     }
 
